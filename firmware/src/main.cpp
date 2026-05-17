@@ -16,7 +16,7 @@ void loop() {
 
     float tiltAngle = sensor.getTiltAngle();
     Serial.print("Current Angle: ");
-    Serial.println(angle);
+    Serial.println(tiltAngle);
 
     delay(100);
 }
