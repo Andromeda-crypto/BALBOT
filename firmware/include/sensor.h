@@ -7,7 +7,16 @@ class Sensor {
 private:
     float angle;
     unsigned long lastUpdateTime;
-    float gyroBiasx;
+    float gyroBiasX;
+    float accelX;
+    float accelY;
+    float accelZ;
+
+    float gyroX;
+    float gyroY;
+    float gyroZ;
+
+    bool filterInitialized;
 
 public:
     Sensor();

@@ -19,5 +19,5 @@ void loop() {
     Serial.print("Current Angle: ");
     Serial.println(angle);
 
-    delay(1000);
+    delay(100);
 }

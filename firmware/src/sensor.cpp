@@ -8,8 +8,8 @@
 Sensor::Sensor(){
     angle = 0.0;
     lastUpdateTime = 0;
-    gyroBiasx = 0.0;
-
+    gyroBiasX = 0.0;
+    filterInitialized = false;
 }
 
 /*
@@ -34,7 +34,7 @@ void Sensor::begin(){
 void Sensor::calibrate(){
    Serial.println("Caibrating gyro .....  Keep sensor still.");
    long sum = 0;
-   for (int i=0; i<=500;i++){
+   for (int i=0; i < 500;i++){
         Wire.beginTransmission(MPU_ADDR);
         Wire.write(0x43);
         Wire.endTransmission(false);
@@ -49,11 +49,11 @@ void Sensor::calibrate(){
         delay(3);
    }
 
-   gyroBiasx = sum / 500.0;
+   gyroBiasX = sum / 500.0;
    angle = 0.0;
    lastUpdateTime = micros();
    Serial.print("Gyro bias X: ");
-   Serial.println(gyroBiasx);
+   Serial.println(gyroBiasX);
 }
 
 void Sensor::update() {
@@ -79,11 +79,27 @@ void Sensor::update() {
         float dt = (now - lastUpdateTime) / 1000000.0;
         lastUpdateTime = now;
 
-        float gyroRate = (rawGyroX - gyroBiasx) / 131.0;
+        accelX = rawAccelX / 16384.0;
+        accelY = rawAccelY / 16384.0;
+        accelZ = rawAccelZ / 16384.0;
 
-        angle = angle + gyroRate * dt;
+        float accelAngle = atan2(accelX, accelZ) * 180.0 / PI;
+
+        gyroX = (rawGyroX - gyroBiasX) / 131.0;
+        gyroY = rawGyroY / 131.0;
+        gyroZ = rawGyroZ / 131.0;
+
+        if (!filterInitialized) {
+            angle = accelAngle;
+            filterInitialized = true;
+            lastUpdateTime = micros();
+            return;
+        }
+
+        angle = 0.98 * (angle + gyroX * dt) + 0.02 * accelAngle;
     }
 }
+
 float Sensor::getAngle(){
     return angle;
 }
