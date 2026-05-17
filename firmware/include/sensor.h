@@ -6,6 +6,8 @@
 class Sensor {
 private:
     float angle;
+    unsigned long lastUpdateTime;
+    float gyroBiasx;
 
 public:
     Sensor();
