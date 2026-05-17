@@ -14,8 +14,7 @@ void setup() {
 void loop() {
     sensor.update();
 
-    float angle = sensor.getAngle();
-
+    float tiltAngle = sensor.getTiltAngle();
     Serial.print("Current Angle: ");
     Serial.println(angle);
 

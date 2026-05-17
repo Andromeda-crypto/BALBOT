@@ -100,7 +100,6 @@ void Sensor::update() {
     }
 }
 
-float Sensor::getAngle(){
+float Sensor::getTiltAngle() {
     return angle;
 }
-

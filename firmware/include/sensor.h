@@ -25,7 +25,7 @@ public:
     void calibrate();
     void update();
 
-    float getAngle();
+    float getTiltAngle();
 };
 
 #endif
