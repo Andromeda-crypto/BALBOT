@@ -57,7 +57,7 @@ void Motor::update(float dt) {
     float derivative = 0.0;
 
     if (dt > 0) {
-        derivative = (erroir - lastError) / dt;
+        derivative = (error - lastError) / dt;
     }
 
     lastError = error;
@@ -77,7 +77,7 @@ float Motor::getRPM() const {
     return currentRPM;
 }
 
-float Motor::getCurretnRPM const {
+float Motor::getTargetRPM() const {
     return targetRPM;
 }
 
@@ -99,7 +99,7 @@ void Motor::setPWM(int pwm) {
     }
 
     // reverse
-    else if (pwm < ) {
+    else if (pwm < 0) {
         digitalWrite(in1Pin, LOW);
         digitalWrite(in2Pin, HIGH);
 
