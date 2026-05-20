@@ -1,5 +1,5 @@
 #include <Arduino.h>
-#include "sensor.h"
+#include "Sensor.h"
 #include "BalanceController.h"
 
 Sensor sensor;
