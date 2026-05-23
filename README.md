@@ -312,3 +312,6 @@ Computer Science + Mathematics student focused on:
 - embedded systems
 - autonomous systems
 - real-time software architecture
+
+# Time Spent
+[![wakatime](https://wakatime.com/badge/github/Andromeda-crypto/BALBOT.svg)](https://wakatime.com/badge/github/Andromeda-crypto/BALBOT)
