@@ -6,7 +6,6 @@ Motor::Motor(int pwmPin,
              int in2Pin,
              int encoderPinA,
              int encoderPinB)
-
     : pwmPin(pwmPin),
       in1Pin(in1Pin),
       in2Pin(in2Pin),
@@ -22,7 +21,9 @@ Motor::Motor(int pwmPin,
       lastError(0.0),
       currentPWM(0),
       outputMin(-255),
-      outputMax(255)  {}
+      outputMax(255)
+{
+}
 
 void Motor::begin() {
     pinMode(in1Pin, OUTPUT);
@@ -39,38 +40,29 @@ void Motor::setTargetRPM(float rpm) {
     targetRPM = rpm;
 }
 
-void Motor::setGains(float Kp, float Ki, float Kd) {
-    this->kp = Kp;
-    this->ki = Ki;
-    this->kd = Kd;
+void Motor::setGains(float kp, float ki, float kd) {
+    this->kp = kp;
+    this->ki = ki;
+    this->kd = kd;
 }
 
 void Motor::update(float dt) {
-    /*
-    Current placeholder for future encoder RPM calculation
-    currentRPM will later come from encoder counts
-    */
+    if (dt <= 0.0) {
+        return;
+    }
 
-    float error =  targetRPM - currentRPM;
+    float error = targetRPM - currentRPM;
     integral += error * dt;
 
-    float derivative = 0.0;
-
-    if (dt > 0) {
-        derivative = (error - lastError) / dt;
-    }
-
+    float derivative = (error - lastError) / dt;
     lastError = error;
+
     float output = kp * error + ki * integral + kd * derivative;
 
-    // Clamp output
-    if (output > outputMax) {
-        output = outputMax;
-    }
+    if (output > outputMax) output = outputMax;
+    if (output < outputMin) output = outputMin;
 
-    if (output < outputMin) {
-        output = outputMin;
-    }
+    setPWM((int)output);
 }
 
 float Motor::getRPM() const {
@@ -90,23 +82,21 @@ long Motor::getEncoderCount() const {
 }
 
 void Motor::setPWM(int pwm) {
-    // forward
+    if (pwm > outputMax) pwm = outputMax;
+    if (pwm < outputMin) pwm = outputMin;
+
+    currentPWM = pwm;
+
     if (pwm > 0) {
         digitalWrite(in1Pin, HIGH);
         digitalWrite(in2Pin, LOW);
-
-        digitalWrite(pwmPin, pwm);
+        analogWrite(pwmPin, pwm);
     }
-
-    // reverse
     else if (pwm < 0) {
         digitalWrite(in1Pin, LOW);
         digitalWrite(in2Pin, HIGH);
-
-        digitalWrite(pwmPin, -pwm);
+        analogWrite(pwmPin, -pwm);
     }
-
-    // stop
     else {
         stop();
     }
@@ -115,8 +105,7 @@ void Motor::setPWM(int pwm) {
 void Motor::stop() {
     digitalWrite(in1Pin, LOW);
     digitalWrite(in2Pin, LOW);
-    digitalWrite(pwmPin, LOW);
+    analogWrite(pwmPin, 0);
+
+    currentPWM = 0;
 }
-
-
-    
