@@ -83,7 +83,7 @@ void Sensor::update() {
         accelY = rawAccelY / 16384.0;
         accelZ = rawAccelZ / 16384.0;
 
-        float accelAngle = atan2(accelX, accelZ) * 180.0 / PI;
+        float accelAngle = atan2(accelY, accelZ) * 180.0 / PI;
 
         gyroX = (rawGyroX - gyroBiasX) / 131.0;
         gyroY = rawGyroY / 131.0;

@@ -1,92 +1,39 @@
 #include <Arduino.h>
 
-#include "Sensor.h"
-#include "BalanceController.h"
-#include "Motor.h"
 
-// System Objects
-
-Sensor sensor;
-
-// keep Ki, Kd 0 for intial software gain
-BalanceController controller(1.0,0.0,0.0);
-
-// placehoider pins, update and verify before wiring and testing motors
-Motor leftMotor(25,26,27,34,35);
-Motor rightMotor(14,32,33,36,39);
-
-unsigned long lastLoopTime = 0;
-
-// Safety Setting
-const float TARGET_ANGLE = 90.0;
-const float SAFE_ANGLE_RANGE = 20.0; 
+const int IN1 = 25;
+const int IN2 = 26;
 
 void setup() {
     Serial.begin(115200);
-    sensor.begin();
-    sensor.calibrate(); 
 
-    controller.setTargetAngle(TARGET_ANGLE);
+    pinMode(IN1, OUTPUT);
+    pinMode(IN2, OUTPUT);   
 
-    leftMotor.begin();
-    rightMotor.begin();
-
-    lastLoopTime = micros();
-    Serial.println("Setup complete, entering main loop.");
+    Serial.println("L298N one-motor test started");
 }
 
 void loop() {
-    sensor.update();
+    Serial.println("Forward");
+    digitalWrite(IN1, HIGH);
+    digitalWrite(IN2, LOW);
+    delay(2000);
 
-    unsigned long now = micros();
-    float dt = (now - lastLoopTime) / 1e6; 
-    lastLoopTime = now;
+    Serial.println("Stop");
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, LOW);
+    delay(2000);
 
-    float tiltAngle = sensor.getTiltAngle();
 
-    float angleError = abs(tiltAngle - TARGET_ANGLE);
+    Serial.println("Reverse");
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, HIGH);
+    delay(2000);
 
-    if (angleError > SAFE_ANGLE_RANGE) {
-        controller.reset();
+    Serial.println("Stop");
+    digitalWrite(IN1, LOW);
+    digitalWrite(IN2, LOW);
+    delay(2000);
 
-        leftMotor.setTargetRPM(0.0);
-        rightMotor.setTargetRPM(0.0);
 
-        leftMotor.stop();
-        rightMotor.stop();
-
-        Serial.println("Unsafe angle\nMotors stopped, waiting for reset...");
-        
-        delay(100);
-        return;}
-
-    // Control pipeline
-
-    float controlOutput = controller.update(tiltAngle, dt);
-    leftMotor.setTargetRPM(controlOutput);
-    rightMotor.setTargetRPM(controlOutput);
-
-    leftMotor.update(dt);
-    rightMotor.update(dt);
-
-    // Telemetry
-    Serial.print("Tilt: ");
-    Serial.print(tiltAngle);
-
-    Serial.print(" | Control: ");
-    Serial.print(controlOutput);
-
-    Serial.print(" | Left TargetRPM: ");
-    Serial.print(leftMotor.getTargetRPM());
-
-    Serial.print(" | Right TargetRPM: ");
-    Serial.print(rightMotor.getTargetRPM());
-
-    Serial.print(" | Left PWM: ");
-    Serial.print(leftMotor.getPWM());
-
-    Serial.print(" | Right PWM: ");
-    Serial.println(rightMotor.getPWM());
-
-    delay(100);
-    }
+}
