@@ -7,21 +7,25 @@ public:
           int in1Pin,
           int in2Pin,
           int encoderPinA,
-          int encoderPinB);
+          int encoderPinB,
+          float encoderCountsPerRevolution = 20.0);
 
     void begin();
 
     // Closed-loop velocity command
     void setTargetRPM(float rpm);
 
-    // Runs motor control update, eventually inner PID
+    // Runs encoder/RPM update and optional inner PID
     void update(float dt);
+    void setVelocityPIDEnabled(bool enabled);
+    bool isVelocityPIDEnabled() const;
 
     // Telemetry
     float getRPM() const;
     float getTargetRPM() const;
     int getPWM() const;
     long getEncoderCount() const;
+    void resetEncoderCount();
 
     // Raw motor control fallback
     void setPWM(int pwm);
@@ -39,6 +43,8 @@ private:
     int encoderPinB;
 
     volatile long encoderCount;
+    long lastEncoderCount;
+    float encoderCountsPerRevolution;
 
     float targetRPM;
     float currentRPM;
@@ -54,6 +60,10 @@ private:
 
     int outputMin;
     int outputMax;
+    bool velocityPIDEnabled;
+
+    void handleEncoderTick();
+    static void handleEncoderInterrupt(void* arg);
 };
 
 #endif

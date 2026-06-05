@@ -1,24 +1,24 @@
-# Pinout — BALBOT
+# Pinout - BALBOT
 
 ## I2C
 - MPU6050 SDA: GPIO21
 - MPU6050 SCL: GPIO22
 
-## Motor Driver — L298N
+## Motor Driver - L298N
 
 ### Left Motor
-- ENA / PWM: TBD
-- IN1: TBD
-- IN2: TBD
-- Encoder A: TBD
-- Encoder B: TBD
+- ENA / PWM: GPIO25
+- IN1: GPIO26
+- IN2: GPIO27
+- Encoder A: GPIO34
+- Encoder B: GPIO35
 
 ### Right Motor
-- ENB / PWM: TBD
-- IN3: TBD
-- IN4: TBD
-- Encoder A: TBD
-- Encoder B: TBD
+- ENB / PWM: GPIO14
+- IN3: GPIO32
+- IN4: GPIO33
+- Encoder A: GPIO18
+- Encoder B: GPIO19
 
 ## UART
 - TF-Luna TX -> ESP32 RX2 GPIO16
@@ -29,6 +29,7 @@
 - Status LED: TBD
 
 ## Notes
-- GPIO34–39 are input-only and good candidates for encoder input
-- Motor driver grounds and ESP32 ground must be common
-- Final pin choices must be confirmed before wiring motors
+- GPIO34 and GPIO35 are input-only and require external pullups if the encoder outputs are open-drain/open-collector.
+- Current firmware assumes 20 encoder counts per wheel revolution during bringup; update `ENCODER_COUNTS_PER_REVOLUTION` after confirming the motor/encoder specification.
+- Motor driver grounds and ESP32 ground must be common.
+- Direction convention must be confirmed during raw PWM forward/reverse tests before enabling closed-loop control.

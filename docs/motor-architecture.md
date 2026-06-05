@@ -31,14 +31,13 @@ The subsystem is designed to support:
 - `Motor.cpp` initial implementation
 - PWM abstraction
 - target RPM abstraction
-- PID placeholders
-- encoder infrastructure placeholders
+- encoder interrupt support
+- RPM estimation from encoder count deltas
+- velocity PID enable gate
 - output saturation support
 
 ## Not Yet Implemented
 - physical motor testing
-- encoder interrupt logic
-- RPM calculation
 - hardware PWM output validation
 - inner-loop PID tuning
 
@@ -103,7 +102,7 @@ Planned responsibilities:
 - configure PWM pin as output
 - configure direction pins as output
 - configure encoder pins as input
-- attach encoder interrupts
+- attach encoder interrupt on encoder channel A
 - stop motor safely on startup
 
 ---
@@ -127,12 +126,12 @@ Final convention will be validated during physical testing.
 Runs the motor update loop.
 
 Current role:
-- placeholder architecture
-- future integration point
+- update measured RPM from encoder count deltas
+- run inner velocity PID only when explicitly enabled
 
 Future responsibilities:
-- calculate actual RPM from encoder ticks
-- compute PID correction
+- validate encoder counts-per-revolution on hardware
+- tune PID correction
 - clamp output
 - apply PWM command
 - update motor state
@@ -147,10 +146,10 @@ Planned update frequency:
 Returns measured wheel RPM.
 
 Currently:
-- placeholder value
+- computed from encoder tick deltas in `update(dt)`
 
 Future:
-- computed from encoder tick timing
+- refine counts-per-revolution and sign convention after hardware validation
 
 ---
 
@@ -315,15 +314,15 @@ Expected default limits:
 
 ---
 
-# Future Encoder Plan
+# Encoder Plan
 
-Encoder interrupts will later:
+Encoder interrupts:
 - count wheel ticks
 - determine wheel direction
 - compute RPM
 - feed inner PID loop
 
-Planned architecture:
+Architecture:
 
 ```text
 Encoder ISR
@@ -354,6 +353,10 @@ Purpose:
 - accurate wheel speed tracking
 - disturbance rejection
 - stable balancing response
+
+Current safety rule:
+- velocity PID is disabled by default
+- raw PWM, direction, stop behavior, encoder counts, and RPM telemetry must pass before enabling it
 
 ---
 

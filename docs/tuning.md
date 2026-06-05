@@ -64,16 +64,38 @@ Observed behavior:
 
 ## Current Status
 
-Not physically tested yet.
+Actuation bringup firmware is implemented, but physical testing is still pending.
 
 The Motor subsystem currently exists as:
 - architecture
 - interfaces
-- placeholder PID
+- encoder interrupt support
+- RPM estimation support
+- gated velocity PID
 - PWM abstraction
-- encoder placeholders
 
-Physical validation pending motor arrival.
+Velocity PID remains disabled by default. Raw PWM direction, stop behavior, encoder counts, and RPM telemetry must pass before closed-loop motor control is enabled.
+
+---
+
+## Actuation Bringup Sequence
+
+Current firmware sequence:
+1. Startup stop state
+2. Left motor raw PWM forward
+3. Left motor stop
+4. Left motor raw PWM reverse
+5. Right motor raw PWM forward
+6. Right motor stop
+7. Right motor raw PWM reverse
+8. Final stop state
+
+Bringup settings:
+- Raw PWM command: 110
+- Encoder counts per revolution assumption: 20
+- Motor update rate: 50 Hz
+- Velocity PID: disabled
+- Test requirement: keep robot lifted and ready to cut power
 
 ---
 
@@ -81,6 +103,7 @@ Physical validation pending motor arrival.
 
 | Attempt | Kp | Ki | Kd | Target RPM | Observation | Result |
 |---|---:|---:|---:|---:|---|---|
+| Bringup 1 | 0.0 | 0.0 | 0.0 | N/A | Raw PWM and encoder/RPM firmware ready; physical validation pending | PENDING |
 
 ---
 
