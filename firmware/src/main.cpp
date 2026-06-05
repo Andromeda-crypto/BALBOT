@@ -1,39 +1,22 @@
 #include <Arduino.h>
 
-
-const int IN1 = 25;
-const int IN2 = 26;
+const int encoderA = 18;
+const int encoderB = 19;
 
 void setup() {
     Serial.begin(115200);
+    pinMode(encoderA, INPUT_PULLUP);
+    pinMode(encoderB, INPUT_PULLUP);
 
-    pinMode(IN1, OUTPUT);
-    pinMode(IN2, OUTPUT);   
-
-    Serial.println("L298N one-motor test started");
+    Serial.println("Encoder Test Started.");
 }
 
 void loop() {
-    Serial.println("Forward");
-    digitalWrite(IN1, HIGH);
-    digitalWrite(IN2, LOW);
-    delay(2000);
+    Serial.print("Encoder A: ");
+    Serial.print(digitalRead(encoderA));
 
-    Serial.println("Stop");
-    digitalWrite(IN1, LOW);
-    digitalWrite(IN2, LOW);
-    delay(2000);
+    Serial.print("   Encoder B: ");
+    Serial.println(digitalRead(encoderB));
 
-
-    Serial.println("Reverse");
-    digitalWrite(IN1, LOW);
-    digitalWrite(IN2, HIGH);
-    delay(2000);
-
-    Serial.println("Stop");
-    digitalWrite(IN1, LOW);
-    digitalWrite(IN2, LOW);
-    delay(2000);
-
-
+    delay(50);
 }

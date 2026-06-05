@@ -5,11 +5,11 @@
 
 const char* Telemetry::modeToString(RobotMode mode) {
     switch(mode) {
-        case MODE_STARTUP; return "STARTUP";
-        case MODE_SAFE; return "SAFE";
-        case MODE_ACTIVE; return "ACTIVE";
-        case MODE_FAULT; return "FAULT";
-        default; return "UNKNOWN";
+        case MODE_STARTUP: return "STARTUP";
+        case MODE_SAFE: return "SAFE";
+        case MODE_ACTIVE: return "ACTIVE";
+        case MODE_FAULT: return "FAULT";
+        default: return "UNKNOWN";
     }
 }
 
@@ -29,7 +29,7 @@ void Telemetry::print(const TelemetryData& data) {
     Serial.print(" Error: ");
     Serial.print(data.angleError, 2);
 
-    Serial.print(" Control: ");;
+    Serial.print(" Control: ");
     Serial.print(data.controlOutput, 2);
 
     Serial.print(" Left Target RPM:");
