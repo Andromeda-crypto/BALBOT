@@ -1,98 +1,46 @@
 # BALBOT Tuning Logs
 
-This directory stores hardware tuning notes, session logs, exported dashboard data, and test observations for BALBOT.
+This directory contains the tuning and validation record for BALBOT's physical control system.
 
-Tuning logs are part of the engineering record. They connect firmware changes, PID gain values, chassis configuration, hardware conditions, and observed robot behavior. This prevents tuning from becoming guesswork and makes the project easier to debug, reproduce, and present.
+BALBOT is being developed through staged hardware bring-up: sensor validation, motor actuation, encoder feedback, velocity control, and full balance control. The files in this directory document that progression through test notes, tuning sessions, telemetry exports, and observed behavior during physical trials.
 
-## Purpose
+## Role in the Project
 
-BALBOT is a physical control system. Small changes in chassis geometry, motor response, battery voltage, sensor mounting, encoder direction, or PID gains can significantly affect stability.
+Tuning logs provide traceability between the robot's mechanical configuration, firmware revision, control parameters, and physical behavior.
 
-This directory should capture:
-- actuation bring-up results
-- encoder and RPM validation notes
-- motor velocity PID tuning attempts
-- balance PID tuning attempts
-- safety cutoff behavior
-- chassis revisions
+For a self-balancing robot, the final PID values are only part of the result. The tuning process also depends on chassis geometry, sensor placement, battery voltage, motor response, encoder direction, and safety limits. Recording these sessions makes it possible to understand why specific changes were made and how the system responded.
+
+## Expected Contents
+
+This directory may include:
+- actuation bring-up notes
+- motor direction and stop validation
+- encoder count and RPM validation
+- motor velocity PID tuning sessions
+- balance PID tuning sessions
+- safety cutoff tests
+- chassis revision notes
 - battery and power observations
-- dashboard-exported telemetry sessions
-- failures, suspected causes, fixes, and results
+- exported dashboard telemetry
+- failure analysis and corrective actions
 
-The goal is to preserve not only final values, but the reasoning path that led to them.
+Markdown files are used for session notes and engineering observations. CSV or JSON files may be used for exported telemetry from the dashboard.
 
+## Current Project Context
 
-```md
-# Session Title
+At the current stage, BALBOT is moving from software validation into physical actuation bring-up. The first logs in this directory are expected to focus on:
+- verifying motor wiring and direction
+- confirming stop behavior
+- validating encoder counts
+- validating RPM estimation
+- recording early motor PID behavior
 
-## Setup
-- Date:
-- Chassis:
-- Battery:
-- Firmware commit:
-- Test location:
-- Sensor mount:
-- Motor driver:
-- Notes:
+Balance PID tuning will follow after the motor subsystem has been validated independently.
 
-## Goal
-- What this session is trying to validate or improve.
+## Relationship to Other Documentation
 
-## Starting Values
-- Balance Kp:
-- Balance Ki:
-- Balance Kd:
-- Motor Kp:
-- Motor Ki:
-- Motor Kd:
-- Target angle:
+General design documentation is maintained in `docs/`.
 
-## Observations
-- What the robot did.
-- Whether it oscillated, drifted, saturated, fell, recovered, or behaved asymmetrically.
-- Any visible mechanical or electrical issues.
+This directory is reserved for test evidence and tuning history. It is intended to capture what happened during physical sessions, including both successful and failed attempts.
 
-## Changes Made
-| Attempt | Parameter Change | Observation | Result |
-|---|---|---|---|
-| 1 |  |  |  |
-
-## Outcome
-- Pass/fail result.
-- Best values from the session.
-- What should be tested next.
-
-## Follow-Up
-- Hardware fixes:
-- Firmware fixes:
-- Dashboard/logging fixes:
-```
-
-## Logging Guidelines
-
-Use precise language when recording behavior:
-- "Falls forward after 1-2 seconds" is better than "unstable."
-- "PID output saturated at +255 during recovery" is better than "too much output."
-- "Left RPM reads negative during forward command" is better than "encoder wrong."
-
-Record failed attempts. Failed tests are valuable because they explain why final tuning choices were made.
-
-## Dashboard Exports
-
-When the dashboard supports exporting telemetry, save CSV or JSON files here.
-
-Useful exported fields:
-- timestamp
-- angle
-- target angle
-- PID output
-- left RPM
-- right RPM
-- left PWM
-- right PWM
-- active gains
-- armed/safety state
-- battery voltage, if available
-
-Dashboard exports should be paired with a short Markdown note explaining what physical test was being performed.
-
+The dashboard, once implemented, will provide live telemetry and may export session data into this directory for later review.

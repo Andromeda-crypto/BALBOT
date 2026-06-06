@@ -77,4 +77,4 @@ The interface should prioritize operational clarity:
 - emergency stop available without navigation
 - charts focused on control behavior and saturation
 
-The dashboard should support both tuning sessions and demonstrations without changing the underlying telemetry protocol.
+The dashboard supports both tuning sessions and demonstrations without changing the underlying telemetry protocol.
