@@ -82,7 +82,7 @@ void Motor::update(float dt) {
     if (output > outputMax) output = outputMax;
     if (output < outputMin) output = outputMin;
 
-    setPWM((int)output);
+    setPWM(int(output));
 }
 
 void Motor::setVelocityPIDEnabled(bool enabled) {
