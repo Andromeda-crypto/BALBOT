@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BALBOT Dashboard</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">BALBOT</div>
+    <div class="connection">ws://192.168.4.1/ws <span id="connDot"></span> MOCK</div>
+    <nav>
+      <button class="tab active" data-tab="diagnostics">Diagnostics</button>
+      <button class="tab" data-tab="tuning">Tuning</button>
+      <button class="tab" data-tab="log">Log</button>
+    </nav>
+    <div class="hz"><span id="hz">20</span> Hz</div>
+    <div id="safetyPill" class="pill balancing">BALANCING</div>
+  </header>
+
+  <main id="diagnostics" class="screen active">
+    <aside class="rail">
+      <section class="panel">
+        <h3>Node Health</h3>
+        <div id="nodes"></div>
+      </section>
+
+      <section class="panel">
+        <h3>Hardware</h3>
+        <div class="kv">CPU <span id="cpu">--</span>%</div>
+        <div class="kv">Heap <span id="heap">--</span>%</div>
+        <div class="kv">Battery <span id="battery">--</span>V</div>
+        <div class="kv">Temp <span id="temp">--</span>°C</div>
+      </section>
+
+      <section class="panel">
+        <h3>Raw IMU</h3>
+        <div class="kv">accel_x <span id="accel_x">--</span></div>
+        <div class="kv">accel_z <span id="accel_z">--</span></div>
+        <div class="kv">gyro_y <span id="gyro_y">--</span></div>
+        <div class="kv">angle <span id="raw_angle">--</span>°</div>
+      </section>
+    </aside>
+
+    <section class="center">
+      <section class="panel hero">
+        <div class="horizon">
+          <div id="horizonLine"></div>
+        </div>
+        <div>
+          <div class="label">Fused Tilt</div>
+          <div class="big"><span id="angle">0.0</span>°</div>
+          <div class="muted">Target <span id="target">0.0</span>°</div>
+        </div>
+      </section>
+
+      <section class="panel chart-panel">
+        <h3>Angle vs Target</h3>
+        <canvas id="angleChart"></canvas>
+      </section>
+
+      <section class="panel chart-panel">
+        <h3>PID Output + RPM</h3>
+        <canvas id="motorChart"></canvas>
+      </section>
+
+      <section class="metrics">
+        <div class="metric">Tilt <strong id="m_angle">--</strong></div>
+        <div class="metric">Output <strong id="m_output">--</strong></div>
+        <div class="metric">RPM L <strong id="m_rpm_l">--</strong></div>
+        <div class="metric">RPM R <strong id="m_rpm_r">--</strong></div>
+      </section>
+    </section>
+
+    <aside class="rail">
+      <section class="panel">
+        <h3>PID Params</h3>
+        <label>Kp <input id="kp" type="range" min="0" max="60" step="0.1"></label>
+        <label>Ki <input id="ki" type="range" min="0" max="5" step="0.01"></label>
+        <label>Kd <input id="kd" type="range" min="0" max="5" step="0.01"></label>
+        <button id="apply">Apply Gains</button>
+      </section>
+
+      <section class="panel">
+        <h3>Motor Override</h3>
+        <label>L PWM <input id="pwm_l" type="range" min="-255" max="255"></label>
+        <label>R PWM <input id="pwm_r" type="range" min="-255" max="255"></label>
+      </section>
+
+      <section class="panel">
+        <h3>Commands</h3>
+        <button id="arm">Arm</button>
+        <button id="disarm">Disarm</button>
+        <button id="estop" class="danger">E-Stop</button>
+      </section>
+
+      <section class="panel log-mini">
+        <h3>Event Log</h3>
+        <div id="events"></div>
+      </section>
+    </aside>
+  </main>
+
+  <main id="tuning" class="screen placeholder">Tuning workspace coming next.</main>
+  <main id="log" class="screen placeholder">Full log export coming next.</main>
+
+  <footer class="statusbar">
+    <span>node: /dashboard</span>
+    <span>uptime: <b id="uptime">0.0</b>s</span>
+    <span>imu: OK</span>
+    <span>driver: MOCK</span>
+    <span>battery: <b id="footerBattery">--</b>V</span>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
