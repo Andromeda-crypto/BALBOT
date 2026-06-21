@@ -42,7 +42,7 @@ void loop() {
 
         Serial.print("PWM=");
         Serial.print(testMotor.getPWM());
-
+ 
         Serial.print(" Count=");
         Serial.print(testMotor.getEncoderCount());
 
