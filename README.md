@@ -3,10 +3,6 @@
 > A two-wheeled self-balancing robotic platform for investigating embedded control, inertial sensing, state estimation, and closed-loop electromechanical systems.
 
 <p align="center">
-    <img src="docs/images/balbot.png" width="700">
-</p>
-
-<p align="center">
     <img src="https://img.shields.io/badge/C%2B%2B-17-blue">
     <img src="https://img.shields.io/badge/IoT-ESP32-red">
     <img src="https://img.shields.io/badge/Control-Systems-green">
@@ -18,7 +14,7 @@
 
 ## Overview
 
-BALBOT is a two-wheeled self-balancing robotic platform designed to investigate real-time embedded control, inertial sensing, sensor fusion, and feedback stabilization.
+BALBOT is a two-wheeled self-balancing robotic platform designed to investigate embedded control, inertial sensing, sensor fusion, and feedback stabilization.
 
 The system combines an ESP32-based control architecture, inertial measurements from the MPU6050, wheel encoder feedback, and closed-loop motor control to stabilize an inherently unstable system. The project emphasizes modular software design, subsystem validation, and first-principles engineering.
 
@@ -118,6 +114,10 @@ The outer control loop computes corrective actions from the estimated body attit
 
 The inner control loop regulates wheel velocity using encoder feedback.
 
+### Telemetry Module
+
+The telemetry subsystem provides real-time system monitoring and debugging support through serial communication, allowing visualization and analysis of sensor measurements, control outputs, and system state.
+
 ---
 
 ## Control Structure
@@ -180,25 +180,63 @@ The control electronics and motor subsystem operate from independent power paths
 ```text
 BALBOT/
 │
-├── include/
-│   ├── Sensor.h
-│   ├── Motor.h
-│   └── BalanceController.h
-│
-├── src/
-│   ├── Sensor.cpp
-│   ├── Motor.cpp
-│   ├── BalanceController.cpp
-│   └── main.cpp
+├── dashboard/
+│   ├── app.js
+│   ├── index.html
+│   ├── README.md
+│   └── style.css
 │
 ├── docs/
+│   ├── control-architecture.md
+│   ├── control-bringup.md
+│   ├── hardware-notes.md
+│   ├── L298N_REFERENCE.md
+│   ├── motor-architecture.md
+│   ├── pinout.md
+│   ├── sensor-bringup.md
+│   └── tuning.md
 │
-├── platformio.ini
+├── firmware/
+│   │
+│   ├── include/
+│   │   ├── BalanceController.h
+│   │   ├── Motor.h
+│   │   ├── Sensor.h
+│   │   ├── Telemetry.h
+│   │   └── README
+│   │
+│   ├── src/
+│   │   ├── BalanceController.cpp
+│   │   ├── main.cpp
+│   │   ├── Motor.cpp
+│   │   ├── Sensor.cpp
+│   │   └── Telemetry.cpp
+│   │
+│   ├── lib/
+│   └── platformio.ini
 │
+├── tuning-logs/
+│   └── README.md
+│
+├── .gitignore
 ├── LICENSE
-│
 └── README.md
 ```
+
+---
+
+## Documentation
+
+| Document | Description |
+|---------|-------------|
+| `control-architecture.md` | Control system design and controller architecture |
+| `control-bringup.md` | Controller initialization and validation |
+| `hardware-notes.md` | Hardware measurements and integration notes |
+| `L298N_REFERENCE.md` | Motor driver reference and wiring |
+| `motor-architecture.md` | Motor subsystem design |
+| `pinout.md` | System wiring and pin assignments |
+| `sensor-bringup.md` | IMU initialization and validation |
+| `tuning.md` | Controller tuning procedures and experimental notes |
 
 ---
 
@@ -236,5 +274,4 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 
 **Om Anand**
 
-Computer Science and Mathematics  
-Robotics, Embedded Systems, Control Systems, and Autonomous Robotics
+Computer Science and Mathematics
